@@ -1,0 +1,25 @@
+{
+  "name": "learning-react",
+  "version": "1.0.0",
+  "description": "Learning react",
+  "scripts": {
+    "start": "parcel index.html",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Harshit-Raj-23/learning-react.git"
+  },
+  "author": "Harshit Raj",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Harshit-Raj-23/learning-react/issues"
+  },
+  "homepage": "https://github.com/Harshit-Raj-23/learning-react#readme",
+  "dependencies": {
+    "babel": "^6.23.0",
+    "parcel": "^2.15.4",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
+  }
+}
