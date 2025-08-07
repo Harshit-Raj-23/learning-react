@@ -1,6 +1,5 @@
 import RestaurantCard from "./RestaurantCard";
 import { useEffect, useState } from "react";
-import restaurantList from "../utils/mockData";
 import Shimmer from "./Shimmer";
 
 const Body = () => {
@@ -18,13 +17,14 @@ const Body = () => {
 
     const fetchData = async () => {
         const data = await fetch(
-            "https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9351929&lng=77.62448069999999&page_type=DESKTOP_WEB_LISTING"
+            "https://www.swiggy.com/mapi/restaurants/list/v5?offset=0&is-seo-homepage-enabled=true&lat=12.97530&lng=77.59100&carousel=true&third_party_vendor=1"
+            // to bypass cors issue we can append "https://corsproxy.io/?" before our API url. But is has limit for API calls per mins to 40.
         )
-        const json = await data.json(); // This api is not working so I'm using mockData.
+        const json = await data.json();
         console.log(json);
 
-        setListOfRestaurants(restaurantList); // constant data
-        setFilteredRestaurants(restaurantList); // constant data
+        setListOfRestaurants(json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
+        setFilteredRestaurants(json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
     };
 
     // Conditional rendering
@@ -75,7 +75,7 @@ const Body = () => {
             </div>
             <div className='res-container'>
                 {filteredRestaurants.map((restaurant) => {
-                    return <RestaurantCard key={restaurant.data.id} resData={restaurant} />
+                    return <RestaurantCard key={restaurant.info.id} resData={restaurant} />
                 })}
             </div>
         </div>
