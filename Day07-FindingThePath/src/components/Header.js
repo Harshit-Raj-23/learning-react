@@ -1,9 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect, use } from "react";
 import { LOGO_URL } from "../utils/constants";
 import { Link } from "react-router-dom";
 
 const Header = () => {
     const [btnNameReact, setBtnNameReact] = useState("Login");
+
+    useEffect(() => {
+        console.log("useEffect invoked.");        
+    }, [btnNameReact])
 
     return (
         <div className='header'>
