@@ -1,6 +1,8 @@
 import RestaurantCard from "./RestaurantCard";
 import { useEffect, useState } from "react";
 import Shimmer from "./Shimmer";
+import { Link } from "react-router-dom";
+import { RESTAURANT_API } from "../utils/constants";
 
 const Body = () => {
     // Local state variable - Super powerful variable
@@ -17,7 +19,7 @@ const Body = () => {
 
     const fetchData = async () => {
         const data = await fetch(
-            "https://www.swiggy.com/mapi/restaurants/list/v5?offset=0&is-seo-homepage-enabled=true&lat=12.97530&lng=77.59100&carousel=true&third_party_vendor=1"
+            RESTAURANT_API
             // to bypass cors issue we can append "https://corsproxy.io/?" before our API url. But is has limit for API calls per mins to 40.
         )
         const json = await data.json();
@@ -50,7 +52,7 @@ const Body = () => {
                         className="search-btn"
                         onClick={() => {
                             const filteredRestaurants = listOfRestaurants.filter(
-                                (restaurant) => restaurant.data.name.toLowerCase().includes(searchText.toLowerCase())
+                                (restaurant) => restaurant?.info?.name.toLowerCase().includes(searchText.toLowerCase())
                             );
                             setFilteredRestaurants(filteredRestaurants);
                         }}
@@ -64,7 +66,7 @@ const Body = () => {
                         onClick={() => {
                             console.log('btn pressed');                        
                             const filteredRestaurants = listOfRestaurants.filter(
-                                (restaurant) => restaurant.data.avgRating > 4
+                                (restaurant) => restaurant.info.avgRating > 4
                             );
                             setFilteredRestaurants(filteredRestaurants);
                         }}
@@ -75,7 +77,14 @@ const Body = () => {
             </div>
             <div className='res-container'>
                 {filteredRestaurants.map((restaurant) => {
-                    return <RestaurantCard key={restaurant.info.id} resData={restaurant} />
+                    return (
+                        <Link 
+                            to={"/restaurant/" + restaurant?.info?.id}
+                            key={restaurant?.info?.id}
+                        >
+                            <RestaurantCard resData={restaurant} />
+                        </Link>
+                    )
                 })}
             </div>
         </div>

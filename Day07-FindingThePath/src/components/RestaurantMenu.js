@@ -20,7 +20,11 @@ const RestaurantMenu = () => {
             console.log(restaurantData);            
             setRestaurantInfo(restaurantData);
 
-            const menuItems = await json?.data?.cards[5]?.groupedCard?.cardGroupMap?.REGULAR?.cards[2]?.card?.card?.itemCards;
+            const menuItems = await json?.data?.cards.find(x=> x.groupedCard)?.
+                            groupedCard?.cardGroupMap?.REGULAR?.
+                            cards?.map(x => x.card?.card)?.
+                            filter(x=> x['@type'] == "type.googleapis.com/swiggy.presentation.food.v2.ItemCategory")?.
+                            map(x=> x.itemCards).flat().map(x=> x.card?.info) || [];
             console.log(menuItems);
             setRestaurantMenu(menuItems);
 
@@ -46,9 +50,21 @@ const RestaurantMenu = () => {
                 <h4>{restaurantInfo?.avgRating} stars</h4>
                 <h4>{restaurantInfo?.sla?.deliveryTime} min</h4>
             </div>
-            <ul>
-
-            </ul>
+            <div>
+                <h2>Recommended</h2>
+                <h4>{restaurantMenu.length} ITEMS</h4>
+                {/* <ul>{restaurantMenu.map((item) => (
+                    <li key={item?.id}>{item?.id} - {item?.name} - ₹{item?.price / 100}</li>
+                ))}</ul> */} // This code was taking some duplicate values so I used the below code.
+                <ul>
+                    {[...new Map(restaurantMenu.map(item => [item.id, item])).values()]
+                        .map(item => (
+                        <li key={item.id}>
+                            {item.name} - ₹{item.price / 100}
+                        </li>
+                        ))}
+                    </ul>
+            </div>
         </div>
     );
 };
