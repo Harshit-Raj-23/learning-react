@@ -3,7 +3,7 @@ import { RESTAURANT_MENU_API } from "./constants";
 
 const useRestaurantMenu = (resId) => {
     const [ restaurantInfo , setRestaurantInfo ] = useState(null);
-    const [ restaurantMenu, setRestaurantMenu ] = useState([]);
+    const [ itemCategories, setItemCategories ] = useState([]);
 
     useEffect(() => {
         getRestaurantInfo(resId);
@@ -24,23 +24,21 @@ const useRestaurantMenu = (resId) => {
                 console.log(restaurantData);        
                 setRestaurantInfo(restaurantData)
 
-                const menuItems = await json?.data?.cards.find(x=> x.groupedCard)?.
-                                        groupedCard?.cardGroupMap?.REGULAR?.
-                                        cards?.map(x => x.card?.card)?.
-                                        filter(x=> x['@type'] == "type.googleapis.com/swiggy.presentation.food.v2.ItemCategory")?.
-                                        map(x=> x.itemCards).flat().map(x=> x.card?.info) || [];
-                console.log(menuItems);        
-                setRestaurantMenu(menuItems);
+                const itemCategories = await json?.data?.cards.find(x=> x.groupedCard)?.
+                                        groupedCard?.cardGroupMap?.REGULAR?.cards?.
+                                        filter(x=> x.card?.card?.['@type'] == "type.googleapis.com/swiggy.presentation.food.v2.ItemCategory") || [];
+                console.log(itemCategories);        
+                setItemCategories(itemCategories);
             }
         } catch (error) {
             setRestaurantInfo(null);
-            setRestaurantMenu([]);
+            setItemCategories([]);
             console.error(error);
             
         }
     };
 
-    return [ restaurantInfo, restaurantMenu ];
+    return [ restaurantInfo, itemCategories ];
 };
 
 export default useRestaurantMenu;
